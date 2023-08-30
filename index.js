@@ -9,6 +9,10 @@ app.use(cors());
 // const api_url = process.env.API_URL;
 const api_key = process.env.API_KEY;
 
+app.get("/", (req, res) => {
+  res.json({ message: "Bienvenue sur l'API Marvel" });
+});
+
 // Récupérer la liste des personnages
 app.get("/personnages", async (req, res) => {
   try {
