@@ -20,8 +20,8 @@ app.get("/characters", async (req, res) => {
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${api_key}`
     );
-    const personnages = response.data.results;
-    res.json(personnages);
+    const characters = response.data.results;
+    res.json(characters);
   } catch (error) {
     res.status(500).json({
       message:
@@ -30,11 +30,28 @@ app.get("/characters", async (req, res) => {
   }
 });
 
+// Récupérer un personnage
+app.get("/character/:characterId", async (req, res) => {
+  const characterId = req.params.characterId;
+
+  try {
+    const response = await axios.get(
+      `https://lereacteur-marvel-api.herokuapp.com/character/${characterId}?apiKey=${api_key}`
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Une erreur est survenue lors de la récupération du personnage",
+    });
+  }
+});
+
 // Récupérer la listes des comics
 app.get("/comics", async (req, res) => {
   try {
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${api_key}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics/?apiKey=${api_key}`
     );
     const comics = response.data.results;
     res.json(comics);
@@ -46,9 +63,26 @@ app.get("/comics", async (req, res) => {
   }
 });
 
+// Récupérer un comic
+app.get("/comic/:comicId", async (req, res) => {
+  const comicID = req.params.comicId;
+  try {
+    const response = await axios.get(
+      `https://lereacteur-marvel-api.herokuapp.com/comic/${comicID}?apiKey=${api_key}`
+    );
+    console.log(response);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({
+      message:
+        "Une erreur est survenue lors de la récupération de la bande dessinée",
+    });
+  }
+});
+
 // Gestion de toutes les autres routes (page non trouvée)
 app.all("*", function (req, res) {
-  res.json({ message: "Page not found" });
+  res.json({ message: "Page not found..." });
 });
 
 // Démarrage du serveur
