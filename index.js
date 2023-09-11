@@ -46,7 +46,7 @@ app.get("/comics", async (req, res) => {
   }
 });
 
-// Gestion de toutes les autres routes (page non trouvée)
+// Gestion de toutes les autres routes 
 app.all("*", function (req, res) {
   res.json({ message: "Page not found" });
 });
