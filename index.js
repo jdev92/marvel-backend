@@ -7,8 +7,8 @@ const app = express(); // création du serveur
 app.use(cors());
 app.use(express.json());
 
-// const api_url = process.env.API_URL;
 const api_key = process.env.API_KEY;
+const api_url_characters = process.env.API_URL_CHARACTERS;
 
 app.get("/", (req, res) => {
   res.json("Bienvenue sur l'API Marvel");
@@ -17,15 +17,17 @@ app.get("/", (req, res) => {
 // Récupérer la liste des personnages
 app.get("/characters", async (req, res) => {
   try {
+    const { skip = 0 } = req.query;
+
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${api_key}`
+      `${api_url_characters}?apiKey=${api_key}&skip=${skip}`
     );
     const characters = response.data.results;
     res.json(characters);
   } catch (error) {
     res.status(500).json({
       message:
-        "Une erreur est survenue lors de la récupération des personnages",
+        "Une erreur s'est produite lors de la récupération des personnages.",
     });
   }
 });
@@ -36,7 +38,7 @@ app.get("/character/:characterId", async (req, res) => {
 
   try {
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/character/${characterId}?apiKey=${api_key}`
+      `https://lereacteur-marvel-api.herokuapp.com/character/${characterId}?skip=2?apiKey=${api_key}`
     );
 
     res.json(response.data);
@@ -80,7 +82,7 @@ app.get("/comic/:comicId", async (req, res) => {
   }
 });
 
-// Gestion de toutes les autres routes 
+// Gestion de toutes les autres routes
 app.all("*", function (req, res) {
   res.json({ message: "Page not found..." });
 });
